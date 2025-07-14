@@ -5,9 +5,11 @@ local Microphone = GetPart("Microphone")
 
 local PlayerService = require("players")
 
-local Whitelist="HuntersWays101,Dankest_Things,Syroos,Stan,Nadgob1,VO1D_STONE,xXnoob_slayer227Xx,L5108313,springtrapxd911,ParagonOfSanguine,DemonSecter44,LuaBloxor,robloxboxertBLOCKED,Dylanisbeautiful,Sketchyskybread,madgarry105,XxgamergrannygirlxX,alone_baby,Matthewthegreat7,redballking1,blueloops9,Lodire2O"
+local Whitelist="ParagonOfSanguine AtsKaanDmn Xxabiyyu_ggxX LuaBloxor HuntersWays101 DemonSecter44 madgarry105 robloxboxertBLOCKED VO1D_STONE Dylanisbeautiful Dankest_Things Sketchyskybread xXnoob_slayer227Xx rupercetamol Meowcat_Hates Minelolololol jhnb_real ItchyZoomWasTaken louisartofwar09 v1nikon springtrapxd911 l5108313 unalej1 michaelosei lolergamer0 orekay2 lodire2o makerbenjammin6 GenericRblxStudioDev dorpg articlize iamachicken1928 burgertaxman 0nehara"
 
-local list=Whitelist:split(",")
+
+
+local list=Whitelist:split(" ")
 
 local TargetListShortcut = {}
 
@@ -15,7 +17,7 @@ local MAINTARGET
 local Command = "/t"
 local refresh = "-r"
 
-print([[-v4
+print([[-v3
 -___ ___  _       ____  __    __  ___ ___        ____  ___  
 |   |   || |     /    ||  |__|  ||   |   |      |    |/   \ 
 | _   _ || |    |  o  ||  |  |  || _   _ | _____ |  ||     |
@@ -123,13 +125,21 @@ local function Calculate(Player)
 	end
 end
 
+local function CheckIfWhiteListed(PlayerName)
+	if table.find(list,PlayerName) then
+		return " - [Allied]"
+	else
+		return ""
+	end
+end
+
 local players = GetPlayers()
 
 print(`PLAYERS IN REGION, PLEASE TYPE "{Command} [number]"" TO MANUALLY SELECT TARGET OR {refresh} to refresh`)
 
 for i, users in players do
 	TargetListShortcut[i] = users
-	print(`{i}....{users}`)
+	print(`{i}....{users}{CheckIfWhiteListed(users)}`)
 end
 
 Microphone.Chatted:Connect(function(plr,Text:string)
@@ -168,7 +178,7 @@ Microphone.Chatted:Connect(function(plr,Text:string)
 
 			for i, users in players do
 				TargetListShortcut[i] = users
-				print(`{i}....{users}`)
+				print(`{i}....{users}{CheckIfWhiteListed(users)}`)
 			end
 		end
 	end
@@ -186,6 +196,7 @@ while task.wait(1/TimeClock) do
 					d:Dispense()
 					d:Dispense()
 					d:Dispense()
+					print("VOOLY 3")
 				end
 				TriggerPort(1)
 			end
