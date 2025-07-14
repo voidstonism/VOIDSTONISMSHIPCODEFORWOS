@@ -5,7 +5,7 @@ local Microphone = GetPart("Microphone")
 
 local PlayerService = require("players")
 
-local Whitelist="ParagonOfSanguine AtsKaanDmn Xxabiyyu_ggxX LuaBloxor HuntersWays101 DemonSecter44 madgarry105 robloxboxertBLOCKED VO1D_STONE Dylanisbeautiful Dankest_Things Sketchyskybread xXnoob_slayer227Xx rupercetamol Meowcat_Hates Minelolololol jhnb_real ItchyZoomWasTaken louisartofwar09 v1nikon springtrapxd911 l5108313 unalej1 michaelosei lolergamer0 orekay2 lodire2o makerbenjammin6 GenericRblxStudioDev dorpg articlize iamachicken1928 burgertaxman 0nehara"
+local Whitelist="ParagonOfSanguine Lodire2O AtsKaanDmn Xxabiyyu_ggxX LuaBloxor HuntersWays101 DemonSecter44 madgarry105 robloxboxertBLOCKED VO1D_STONE Dylanisbeautiful Dankest_Things Sketchyskybread xXnoob_slayer227Xx rupercetamol Meowcat_Hates Minelolololol jhnb_real ItchyZoomWasTaken louisartofwar09 v1nikon springtrapxd911 l5108313 unalej1 michaelosei lolergamer0 orekay2 lodire2o makerbenjammin6 GenericRblxStudioDev dorpg articlize iamachicken1928 burgertaxman 0nehara"
 
 
 
