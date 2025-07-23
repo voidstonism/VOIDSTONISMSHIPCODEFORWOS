@@ -54,7 +54,7 @@ end
 
 -- Main auto-aim loop
 local function AutoAim()
-	while task.wait(1/60) do
+	while AutoAimBoolean do
 		local name, predictedPos, distance = PredictTargetPosition()
 
 		if name and AutoAimBoolean then
@@ -69,6 +69,7 @@ local function AutoAim()
 			Gyro.Seek = "AllExcept " .. table.concat(seekExclusions, " ") .. " TrigMaxMax750000 Max750000"
 			Gyro:PointAt()
 		end
+		wait(0.1)
 	end
 end
 
