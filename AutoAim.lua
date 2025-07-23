@@ -1,6 +1,7 @@
 local LifeSensor = GetPart("LifeSensor")
 local Gyro = GetPart("Gyro")
 local Seat = GetPart("VehicleSeat")
+local TriggerPort = GetPort(1)
 
 Gyro.MaxTorque = 1e10
 Gyro.TriggerWhenSeeked = false
@@ -8,7 +9,7 @@ Seat.Enabled = true
 
 local AutoAimBoolean = false
 
--- Whitelist as a lookup table for fast checking
+-- Fast lookup
 local Whitelist = {
 	["HuntersWays101"] = true, ["Dankest_Things"] = true, ["Stan"] = true,
 	["Nadgob1"] = true, ["VO1D_STONE"] = true, ["xXnoob_slayer227Xx"] = true,
@@ -19,17 +20,26 @@ local Whitelist = {
 	["redballking1"] = true, ["blueloops9"] = true, ["Lodire2O"] = true,
 }
 
--- Utility: Find closest non-whitelisted player
+-- Build Gyro.Seek string once
+local SeekString = "AllExcept " .. table.concat((function()
+	local t = {}
+	for name in pairs(Whitelist) do
+		t[#t+1] = name
+	end
+	return t
+end)(), " ") .. " TrigMaxMax750000 Max750000"
+
+-- Return nearest non-whitelisted player and position
 local function GetNearestTarget()
 	local readings = LifeSensor:GetReading()
-	local nearestName, nearestPos
-	local shortestDistance = math.huge
+	local nearestName, nearestPos, shortestDistance = nil, nil, math.huge
+	local sensorPos = LifeSensor.Position
 
-	for player, pos in next, readings do
-		if player and not Whitelist[player] then
-			local distance = (pos - LifeSensor.Position).Magnitude
-			if distance < shortestDistance then
-				nearestName, nearestPos, shortestDistance = player, pos, distance
+	for name, pos in pairs(readings) do
+		if not Whitelist[name] then
+			local dist = (pos - sensorPos).Magnitude
+			if dist < shortestDistance then
+				nearestName, nearestPos, shortestDistance = name, pos, dist
 			end
 		end
 	end
@@ -37,47 +47,40 @@ local function GetNearestTarget()
 	return nearestName, nearestPos, shortestDistance
 end
 
--- Predictive calculation
+-- Predict movement
 local function PredictTargetPosition()
-	local name1, pos1, dist1 = GetNearestTarget()
+	local name1, pos1, _ = GetNearestTarget()
 	if not pos1 then return end
 
-	task.wait() -- One frame delay
-
+	task.wait() -- frame delay
 	local _, pos2, dist2 = GetNearestTarget()
 	if not pos2 then return end
 
-	local velocity = pos2 - pos1
-	local predicted = pos2 + velocity * (4.5 + (dist2 / 1000))
+	local predicted = pos2 + (pos2 - pos1) * (4.5 + dist2 / 1000)
 	return name1, predicted, dist2
 end
 
--- Main auto-aim loop
-local function AutoAim()
-	while AutoAimBoolean do
-		local name, predictedPos, distance = PredictTargetPosition()
+-- Auto-aim loop using Heartbeat for max update rate
+task.spawn(function()
+	while true do
+		wait()
 
-		if name and AutoAimBoolean then
+		if not AutoAimBoolean then continue end
+
+		local name, predictedPos = PredictTargetPosition()
+
+		if name then
 			Gyro.Seek = ""
 			Gyro:PointAt(predictedPos)
 		else
-			-- Build seek string dynamically from whitelist
-			local seekExclusions = {}
-			for player in pairs(Whitelist) do
-				table.insert(seekExclusions, player)
-			end
-			Gyro.Seek = "AllExcept " .. table.concat(seekExclusions, " ") .. " TrigMaxMax750000 Max750000"
+			Gyro.Seek = SeekString
 			Gyro:PointAt()
 		end
-		wait(0.1)
 	end
-end
+end)
 
--- Start auto-aim loop in a thread
-task.spawn(AutoAim)
-
--- Toggle logic on Port(1)
-GetPort(1).Triggered:Connect(function()
+-- Port toggle
+TriggerPort.Triggered:Connect(function()
 	AutoAimBoolean = not AutoAimBoolean
 	Seat.Enabled = not AutoAimBoolean
 
