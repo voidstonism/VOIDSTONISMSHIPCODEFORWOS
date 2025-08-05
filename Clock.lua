@@ -1,4 +1,4 @@
-local Screen = GetPart("Screen")
+local Screen = GetPart("Screen") or GetPart("TouchScreen")
 local Int = GetPart("Instrument")
 
 local BackGround = Screen:CreateElement('ImageLabel',{
@@ -102,4 +102,5 @@ while task.wait(1) do
 	
 	task.spawn(InterPolate,MinuteHand,60,MinuteDegree)
 	task.spawn(InterPolate,HourHand,60,HourDegree)
+
 end
