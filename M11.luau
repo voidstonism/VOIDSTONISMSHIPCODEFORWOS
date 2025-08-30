@@ -231,7 +231,7 @@ while wait(1/TimeClock) do
 	local Error, Msg = pcall(function()
 		dprint(MAINTARGET)
 		if MAINTARGET == nil then -- if nil, far range is activated
-			if FindClosestPlr() ~= nil then
+			if next(LifeSensor:GetPlayers()) ~= nil then
 				MAINTARGET = FindClosestPlr()
 				if MAINTARGET then
 					print(`Target aquired: {MAINTARGET} ({players:GetUsername(MAINTARGET)})`)
