@@ -215,12 +215,14 @@ Microphone.Chatted:Connect(function(plrid,msg)
 		msg:gsub("\n","")
 		if msg:lower():find("/t") then
 			local number = tonumber(msg:sub(msg:find("/t")+2))
-			if not List[number] then end
-			local Target = tonumber(List[number])
-			print(`Target Set to {Target} ({players:GetUsername(Target)})`)
+			if number and List[number]~= nil then 
+				local Target = tonumber(List[number])
+				print(`Target Set to {Target} ({players:GetUsername(Target)})`)
 
-			MAINTARGET = Target
-
+				MAINTARGET = Target
+			else
+				print("Invalid Cmd")
+			end
 		elseif msg:lower() == "-r" then
 			ListOutPossibleTargets()
 		elseif msg:lower() == "-stopmsl" then
