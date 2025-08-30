@@ -214,7 +214,9 @@ Microphone.Chatted:Connect(function(plrid,msg)
 	if table.find(WhiteListTable, plrid) then
 		msg:gsub("\n","")
 		if msg:lower():find("/t") then
-			local Target = tonumber(List[tonumber(msg:sub(msg:find("/t")+2))])
+			local number = tonumber(msg:sub(msg:find("/t")+2))
+			if not List[number] then end
+			local Target = tonumber(List[number])
 			print(`Target Set to {Target} ({players:GetUsername(Target)})`)
 
 			MAINTARGET = Target
