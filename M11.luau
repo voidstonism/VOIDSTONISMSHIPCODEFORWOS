@@ -246,7 +246,7 @@ while wait(1/TimeClock) do
 		else
 			if LifeSensor:GetPlayers()[MAINTARGET] ~= nil then
 				local Pos = Calculate()
-				local Distance = (LifeSensor.Position-Pos).Magnitude
+				local Distance = (LifeSensor.Position-LifeSensor:GetPlayers()[MAINTARGET].Position).Magnitude
 				Gyro:PointAt(Pos)
 				Gyro.Seek = ""
 				dprint("LOCKED!")
