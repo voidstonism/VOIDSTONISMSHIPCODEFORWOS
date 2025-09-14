@@ -213,16 +213,12 @@ ListOutPossibleTargets()
 Microphone.Chatted:Connect(function(plrid,msg)
 	if table.find(WhiteListTable, plrid) then
 		msg:gsub("\n","")
-		if msg:lower():find("/t") then
-			local number = tonumber(msg:sub(msg:find("/t")+2))
-			if number and List[number]~= nil then 
-				local Target = tonumber(List[number])
-				print(`Target Set to {Target} ({players:GetUsername(Target)})`)
+		if msg:lower():find("-t") then
+			local Target = tonumber(List[tonumber(msg:sub(msg:find("-t")+2))])
+			print(`Target Set to {Target} ({players:GetUsername(Target)})`)
 
-				MAINTARGET = Target
-			else
-				print("Invalid Cmd")
-			end
+			MAINTARGET = Target
+
 		elseif msg:lower() == "-r" then
 			ListOutPossibleTargets()
 		elseif msg:lower() == "-stopmsl" then
@@ -235,7 +231,7 @@ while wait(1/TimeClock) do
 	local Error, Msg = pcall(function()
 		dprint(MAINTARGET)
 		if MAINTARGET == nil then -- if nil, far range is activated
-			if next(LifeSensor:GetPlayers()) ~= nil then
+			if FindClosestPlr() ~= nil then
 				MAINTARGET = FindClosestPlr()
 				if MAINTARGET then
 					print(`Target aquired: {MAINTARGET} ({players:GetUsername(MAINTARGET)})`)
