@@ -202,8 +202,8 @@ print([[\n
  
 ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
 Commands:
-/t (Target) - Set the target to the player of your choice
-		e.x: /t 1
+-t (Target) - Set the target to the player of your choice
+		e.x: -t 1
 -r refreshes player selector
 -stopmsl - Stop the missile]])
 
@@ -211,6 +211,7 @@ ListOutPossibleTargets()
 
 
 Microphone.Chatted:Connect(function(plrid,msg)
+	Beep()
 	if table.find(WhiteListTable, plrid) then
 		msg:gsub("\n","")
 		if msg:lower():find("-t") then
