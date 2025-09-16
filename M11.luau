@@ -14,6 +14,8 @@ local TouchDetcor = GetParts("TouchSensor")
 local LifeSensor = GetPart("LifeSensor")
 local Breaker = GetPart("Switch")
 
+Gyro.MaxTorque = 0
+
 local players = require("players")
 
 local Debug = false
@@ -230,12 +232,13 @@ end)
 
 wait(1)
 
-print("ACTIVATED")
-
-Gyro.MaxTorque = 10000000000
-
 while wait(1/TimeClock) do
 	local Error, Msg = pcall(function()
+		if GetPart("Instrument"):GetReading("Power") > 0  then
+			Gyro.MaxTorque = 10000000000
+			print("ACTIVATED")
+		end
+		
 		dprint(MAINTARGET)
 		if MAINTARGET == nil then -- if nil, far range is activated
 			if FindClosestPlr() ~= nil then
