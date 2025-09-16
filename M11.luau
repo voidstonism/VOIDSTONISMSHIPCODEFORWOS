@@ -228,6 +228,12 @@ Microphone.Chatted:Connect(function(plrid,msg)
 	end
 end)
 
+wait(1)
+
+print("ACTIVATED")
+
+Gyro.MaxTorque = 10000000000
+
 while wait(1/TimeClock) do
 	local Error, Msg = pcall(function()
 		dprint(MAINTARGET)
