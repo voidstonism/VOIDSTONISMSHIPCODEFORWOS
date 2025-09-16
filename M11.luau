@@ -203,7 +203,7 @@ print([[\n
 |_____||_____||________||____| |____|\/  \/     |_____||_____|    |_____||_____| 
  
 ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
-Version 1.2
+Version 1.2.1
 
 Commands:
 -t (Target) - Set the target to the player of your choice
@@ -236,7 +236,7 @@ wait(1)
 
 while wait(1/TimeClock) do
 	local Error, Msg = pcall(function()
-		if GetPart("Instrument"):GetReading("Power") > 0  then
+		if GetPart("Instrument"):GetReading("Power") > 0 and Gyro.MaxTorque ~= 10000000000 then
 			Gyro.MaxTorque = 10000000000
 			print("ACTIVATED")
 		end
