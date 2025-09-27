@@ -1,3 +1,11 @@
+--[[MBEE_HEADER__DO_NOT_EDIT]]
+if game then
+	PilotLua = require(game.ReplicatedStorage.PilotLua)
+	Beep, FileSystem, GetCPUTime, GetPart, GetPartFromPort, GetParts, GetPartsFromPort, GetPort, GetPorts, JSONDecode, JSONEncode, Microcontroller, Network, RawFileSystem, SandboxID, SandboxRunID, TriggerPort, logError, pilot = PilotLua()
+end
+-- Version 1755562366
+-- Automatically generated header, provides typechecking. Disable "Microcontroller Typechecking" in advanced settings to remove.
+--[[MBEE_HEADER__DO_NOT_EDIT]]
 local LifeSensor = GetPart("LifeSensor")
 local Gyro = GetPart("Gyro")
 local Seat = GetPart("VehicleSeat")
@@ -7,6 +15,8 @@ Gyro.TriggerWhenSeeked = false
 Seat.Enabled = true
 
 local AutoAimBoolean = false
+
+local PlayerService = require("players")
 
 -- Whitelist as a lookup table for fast checking
 local Whitelist = {
@@ -70,6 +80,81 @@ local function AutoAim()
 			Gyro:PointAt()
 		end
 	end
+end
+
+local function GetOutOfHarmsWay()
+	local Rockets = assert(GetParts("Rocket"),"ROCKET NOT DETECTED CANNOT CONTINUE")
+	local Anchor = GetPart("Anchor")
+	local Switch = GetParts("Switch")
+	local Valve = GetParts("Valve")
+
+	local function Speed(Speed:ValueBase)
+		Beep()
+		for _, R in Rockets do
+			R.Propulsion = Speed
+		end
+	end
+
+	local function MegaSwitch(bool:boolean)
+		Beep()
+		for _, S in Switch do
+			S.SwitchValue = bool
+		end	
+		for _, V in Valve do
+			V.SwitchValue = bool
+		end
+	end
+
+	local Pos = Vector3.new(math.random(-100000000,100000000),0,math.random(-100000000,100000000))+Vector3.new(Gyro.Position.X,0,Gyro.Position.Z)
+
+	if Anchor and next(Rockets) and next(Valve) and next(Switch) then
+		Beep()
+		Seat.Enabled = false
+		Gyro.MaxTorque = 1e10
+		MegaSwitch(true)
+		Anchor.Anchored = false
+		Gyro:PointAt(Pos)
+		Speed(100)
+		wait(5)
+		MegaSwitch(false)
+		Anchor.Anchored = true
+		wait(0.5)
+		Anchor.Anchored = false
+		wait(0.5)
+		Anchor.Anchored = true
+		Seat.Enabled = true
+		Gyro.MaxTorque = 0
+	else
+		print("Um sir, you are missing parts")
+	end
+end
+
+-- Checks for the presence of dangerous players
+
+local function GetPlr(IgnoreWhiteList:boolean)
+	local Reading = LifeSensor:ListPlayers()
+
+	if IgnoreWhiteList == false then
+		for _, ID in Reading do
+			local Username = PlayerService:GetUsername(ID)
+			if Whitelist[Username] then
+				table.remove(Reading, table.find(Reading, ID))
+			else
+				print(Username)
+			end
+		end
+	end
+
+	return Reading
+end
+
+task.wait(1)
+
+if #GetPlr(false) ~= 0 then
+	print(#GetPlr(false))
+	GetOutOfHarmsWay()
+else
+	print("You are alone.")
 end
 
 -- Start auto-aim loop in a thread
