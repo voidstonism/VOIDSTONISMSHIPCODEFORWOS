@@ -150,7 +150,7 @@ end
 
 task.wait(1)
 
-if #GetPlr(false) ~= 0 then
+if GetNearestTarget() ~= nil then
 	print(#GetPlr(false))
 	GetOutOfHarmsWay()
 else
