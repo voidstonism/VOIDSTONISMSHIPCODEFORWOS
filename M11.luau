@@ -68,6 +68,11 @@ local WhiteListTable = {
 	3088934170, --C3PH3_S
 }
 
+local Modes = {
+	Active = false;
+	Retrievemode = false;
+}
+
 local MAINTARGET = nil
 
 local function GetPlr(IgnoreWhiteList:boolean)
@@ -188,8 +193,8 @@ function FullSystemShutDown()
 		r.Propulsion = 0
 	end
 	Breaker.SwitchValue = false
-	Microcontroller:Shutdown()
 	print("FORCED SHUTDOWN COMPLETE")
+	Microcontroller:Shutdown()
 end
 
 -- Activates
@@ -203,7 +208,7 @@ print([[\n
 |_____||_____||________||____| |____|\/  \/     |_____||_____|    |_____||_____| 
  
 ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
-Version 1.2.1
+Version 1.2.2
 
 Commands:
 -t (Target) - Set the target to the player of your choice
@@ -213,21 +218,33 @@ Commands:
 
 ListOutPossibleTargets()
 
+local Commands = {
+	["-stopmsl"] = function(plrid,msg)
+		if Modes.Active == true then
+			FullSystemShutDown()
+		else
+			print("Cannot stop missile, it is in sleep mode.")
+		end
+	end,
+	["-t"] = function(plrid,msg)
+		local Target = tonumber(List[tonumber(msg:sub(msg:find("-t")+2))])
+		print(`Target Set to {Target} ({players:GetUsername(Target)})`)
+		MAINTARGET = Target
+	end,
+	["-r"] = function(plrid,msg)
+		ListOutPossibleTargets()
+	end,
+}
 
 Microphone.Chatted:Connect(function(plrid,msg)
 	Beep()
 	if table.find(WhiteListTable, plrid) then
 		msg:gsub("\n","")
-		if msg:lower():find("-t") then
-			local Target = tonumber(List[tonumber(msg:sub(msg:find("-t")+2))])
-			print(`Target Set to {Target} ({players:GetUsername(Target)})`)
-
-			MAINTARGET = Target
-
-		elseif msg:lower() == "-r" then
-			ListOutPossibleTargets()
-		elseif msg:lower() == "-stopmsl" then
-			FullSystemShutDown()
+		local arg = msg:split(" ")
+		if Commands[arg[1]] then
+			Commands[arg[1]](plrid,msg)
+		else
+			print("Invalid Command")
 		end
 	end
 end)
@@ -239,8 +256,14 @@ while wait(1/TimeClock) do
 		if GetPart("Instrument"):GetReading("Power") > 0 and Gyro.MaxTorque ~= 10000000000 then
 			Gyro.MaxTorque = 10000000000
 			print("ACTIVATED")
+			Modes.Active = true
+			for _, r in Rockets do
+				r.Propulsion = 100
+			end
 		end
 		
+		if Modes.Active == false then return end
+
 		dprint(MAINTARGET)
 		if MAINTARGET == nil then -- if nil, far range is activated
 			if FindClosestPlr() ~= nil then
