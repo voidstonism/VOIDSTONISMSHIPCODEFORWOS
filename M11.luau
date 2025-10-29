@@ -20,6 +20,8 @@ local players = require("players")
 
 local Debug = false
 
+local UniqueId = math.random(1,10000)
+
 local TimeClock = 60
 
 local function dprint(m:string)
@@ -164,11 +166,11 @@ local function Calculate()
 		if p2 == nil then
 			return
 		end
+		
 
 		local Speed = (p2-Position1)*TimeClock
 
 		local p = calculateLead(Gyro.Position,Position1,1000,Speed)
-
 
 		return p
 	else
@@ -208,13 +210,14 @@ print([[\n
 |_____||_____||________||____| |____|\/  \/     |_____||_____|    |_____||_____| 
  
 ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
-Version 1.2.2
+  <<Version 1.2.3>> <<Manually Launched Anti-Warship Missile>> <<VO1D_STONE>>
 
 Commands:
 -t (Target) - Set the target to the player of your choice
 		e.x: -t 1
 -r refreshes player selector
--stopmsl - Stop the missile]])
+-stopmsl - Stop the missile
+-pos - shows position]])
 
 ListOutPossibleTargets()
 
@@ -234,17 +237,21 @@ local Commands = {
 	["-r"] = function(plrid,msg)
 		ListOutPossibleTargets()
 	end,
+	["-pos"] = function(plrid,msg)
+		print(`{math.round(Gyro.Position.X)},{math.round(Gyro.Position.Y)},{math.round(Gyro.Position.Z)}`)
+	end,
+	["-debug"] = function(plrid,msg)
+		Debug = not Debug
+	end,
 }
 
 Microphone.Chatted:Connect(function(plrid,msg)
-	Beep()
 	if table.find(WhiteListTable, plrid) then
 		msg:gsub("\n","")
 		local arg = msg:split(" ")
 		if Commands[arg[1]] then
 			Commands[arg[1]](plrid,msg)
 		else
-			print("Invalid Command")
 		end
 	end
 end)
