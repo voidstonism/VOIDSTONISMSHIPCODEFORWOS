@@ -13,6 +13,7 @@ local Dispenser = GetPart("Dispenser")
 local TouchDetcor = GetParts("TouchSensor")
 local LifeSensor = GetPart("LifeSensor")
 local Breaker = GetPart("Switch")
+local Instrument = GetPart("Instrument")
 
 Gyro.MaxTorque = 0
 
@@ -22,7 +23,7 @@ local Debug = false
 
 local UniqueId = math.random(1,10000)
 
-local TimeClock = 60
+local TimeClock = 30
 
 local function dprint(m:string)
 	if Debug then
@@ -166,11 +167,11 @@ local function Calculate()
 		if p2 == nil then
 			return
 		end
-		
+
 
 		local Speed = (p2-Position1)*TimeClock
 
-		local p = calculateLead(Gyro.Position,Position1,1000,Speed)
+		local p = calculateLead(Gyro.Position,Position1,Instrument:GetReading("Speed"),Speed)
 
 		return p
 	else
@@ -268,7 +269,7 @@ while wait(1/TimeClock) do
 				r.Propulsion = 100
 			end
 		end
-		
+
 		if Modes.Active == false then return end
 
 		dprint(MAINTARGET)
