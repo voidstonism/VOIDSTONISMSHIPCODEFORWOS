@@ -19,16 +19,52 @@ local AutoAimBoolean = false
 local PlayerService = require("players")
 
 -- Whitelist as a lookup table for fast checking
-local Whitelist = {
-	["HuntersWays101"] = true, ["Dankest_Things"] = true, ["Stan"] = true,
-	["Nadgob1"] = true, ["VO1D_STONE"] = true, ["xXnoob_slayer227Xx"] = true,
-	["L5108313"] = true, ["springtrapxd911"] = true, ["ParagonOfSanguine"] = true,
-	["DemonSecter44"] = true, ["LuaBloxor"] = true, ["robloxboxertBLOCKED"] = true,
-	["Dylanisbeautiful"] = true, ["Sketchyskybread"] = true, ["madgarry105"] = true,
-	["XxgamergrannygirlxX"] = true, ["alone_baby"] = true, ["Matthewthegreat7"] = true,
-	["redballking1"] = true, ["blueloops9"] = true, ["Lodire2O"] = true,
+local WhiteListID = {
+	231260961, --ParagonOfSanguine
+	671804696, --AtsKaanDmn
+	643737262, --Xxabiyyu_ggxX
+	1800749867, --LuaBloxor
+	2579398539, --HuntersWays101
+	2001009508, --DemonSecter44
+	163217027, --madgarry105
+	629218990, --robloxboxertBLOCKED
+	1070628373, --VO1D_STONE ALTERED 1070628373
+	116793964, --Dylanisbeautiful
+	124562220, --Dankest_Things
+	912549715, --Sketchyskybread
+	160019711, --xXnoob_slayer227Xx
+	424233066, --rupercetamol
+	582612019, --Meowcat_Hates
+	863898195, --Minelolololol
+	1301233084, --jhnb4_real
+	183121205, --ItchyZoomWasTaken
+	342314704, --louisartofwar09
+	337740176, --v1nikon
+	575054736, --springtrapxd911
+	201125447, --l5108313
+	1820385690, --unalej1
+	22953003, --michaelosei
+	261039947, --lolergamer0
+	455957199, --orekay2
+	1065929391, --lodire2o
+	857491600, --makerbenjammin6
+	3372922014, --GenericRblxStudioDev
+	190573844, --dorpg
+	1949933105, --articlize
+	1572474960, --iamachicken1928
+	1607576935, --burgertaxman
+	74344691, --0nehara
+	3088934170, --C3PH3_S
 }
 
+--Convert to [Player] = true
+local Whitelist = {
+}
+
+
+for _, id in WhiteListID do
+	Whitelist[PlayerService:GetUsername(id)] = true
+end
 -- Utility: Find closest non-whitelisted player
 local function GetNearestTarget()
 	local readings = LifeSensor:GetReading()
