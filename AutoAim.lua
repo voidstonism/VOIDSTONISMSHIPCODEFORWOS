@@ -119,7 +119,7 @@ local function AutoAim()
 end
 
 local function GetOutOfHarmsWay()
-	local Rockets = assert(GetParts("Rocket"),"ROCKET NOT DETECTED CANNOT CONTINUE")
+	local Rockets = assert(GetParts("Rocket"),"[Copilot]: ROCKET NOT DETECTED CANNOT CONTINUE")
 	local Anchor = GetPart("Anchor")
 	local Switch = GetParts("Switch")
 	local Valve = GetParts("Valve")
@@ -143,7 +143,7 @@ local function GetOutOfHarmsWay()
 
 	local Pos = Vector3.new(math.random(-100000000,100000000),0,math.random(-100000000,100000000))+Vector3.new(Gyro.Position.X,0,Gyro.Position.Z)
 
-	if Anchor and next(Rockets) and next(Valve) and next(Switch) then
+	local function ESCAPE()
 		Beep()
 		Seat.Enabled = false
 		Gyro.MaxTorque = 1e10
@@ -151,17 +151,27 @@ local function GetOutOfHarmsWay()
 		Anchor.Anchored = false
 		Gyro:PointAt(Pos)
 		Speed(100)
-		wait(5)
-		MegaSwitch(false)
-		Anchor.Anchored = true
-		wait(0.5)
-		Anchor.Anchored = false
-		wait(0.5)
-		Anchor.Anchored = true
-		Seat.Enabled = true
-		Gyro.MaxTorque = 0
+		print("[Copilot]: I WILL KEEP RUNNING UNTILL YOU INTERVENE. HOWEVER, IF YOU ARE NOT IN SEAT, I WILL STOP FOR YOU!")
+		task.wait(30)
+		if Seat:GetOccupant() then
+			print("[Copilot]: You are in control.")
+		else
+			print("[Copilot]: You left the seat, I will stop for you.")
+			MegaSwitch(false)
+			Anchor.Anchored = true
+			task.wait(0.5)
+			Anchor.Anchored = false
+			task.wait(0.5)
+			Anchor.Anchored = true
+			Seat.Enabled = true
+			Gyro.MaxTorque = 0
+		end
+	end
+
+	if Anchor and next(Rockets) and next(Valve) and next(Switch) then
+		ESCAPE()
 	else
-		print("Um sir, you are missing parts")
+		print("[Copilot]: Um sir, you are missing parts.")
 	end
 end
 
@@ -184,13 +194,13 @@ local function GetPlr(IgnoreWhiteList:boolean)
 	return Reading
 end
 
-task.wait(1)
+wait(0.5)
 
-if GetNearestTarget() ~= nil then
+if #GetPlr(false) > 0 then
 	print(#GetPlr(false))
 	GetOutOfHarmsWay()
 else
-	print("You are alone.")
+	print("[Copilot]: You are alone.")
 end
 
 -- Start auto-aim loop in a thread
