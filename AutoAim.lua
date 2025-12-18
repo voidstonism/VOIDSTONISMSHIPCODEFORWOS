@@ -169,7 +169,12 @@ local function GetOutOfHarmsWay()
 	end
 
 	if Anchor and next(Rockets) and next(Valve) and next(Switch) then
-		ESCAPE()
+		if LifeSensor:GetPlayer(Microcontroller:GetOwnerId()) then
+			print("[Copilot]: my owner is home, time to scram!")
+			ESCAPE()
+		else
+			print("[Copilot]: my owner isnt home, will stay put!")
+		end
 	else
 		print("[Copilot]: Um sir, you are missing parts.")
 	end
