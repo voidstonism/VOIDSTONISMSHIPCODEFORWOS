@@ -196,8 +196,10 @@ end
 
 wait(0.5)
 
-if #GetPlr(false) > 0 then
-	print(#GetPlr(false))
+local numplr = #GetPlr(false)
+
+if numplr > 0 then
+	print(numplr)
 	GetOutOfHarmsWay()
 else
 	print("[Copilot]: You are alone.")
