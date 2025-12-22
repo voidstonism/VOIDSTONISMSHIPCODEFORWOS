@@ -199,17 +199,6 @@ local function GetPlr(IgnoreWhiteList:boolean)
 	return Reading
 end
 
-wait(0.5)
-
-local numplr = #GetPlr(false)
-
-if numplr > 0 then
-	print(numplr)
-	GetOutOfHarmsWay()
-else
-	print("[Copilot]: You are alone.")
-end
-
 -- Start auto-aim loop in a thread
 task.spawn(AutoAim)
 
@@ -226,3 +215,14 @@ GetPort(1).Triggered:Connect(function()
 		Beep(0.3)
 	end
 end)
+
+wait(0.5)
+
+local numplr = #GetPlr(false)
+
+if numplr > 0 then
+	print(numplr)
+	GetOutOfHarmsWay()
+else
+	print("[Copilot]: You are alone.")
+end
