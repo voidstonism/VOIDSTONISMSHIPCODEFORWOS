@@ -16,6 +16,8 @@ local Instrument = GetPart("Instrument")
 
 Gyro.MaxTorque = 0
 
+local L1, L2 = 300, 1900
+
 local players = require("players")
 
 local Debug = false
@@ -197,7 +199,6 @@ function FlickUp()
 end
 
 function Getuptospeed()
-	local L1, L2 = 700, 1600
 
 	local hold = 0.1
 
@@ -207,8 +208,10 @@ function Getuptospeed()
 	until Instrument:GetReading("Speed") >= L1
 
 	print(L1)
+	
+	local Timestamp = DateTime.now().UnixTimestampMillis
 
-	Gyro:PointAt(Gyro.Position+Vector3.new(0,0,6000)*-Gyro.CFrame.lookVector)
+	Gyro:PointAt(Gyro.Position+Vector3.new(0,0,500)*-Gyro.CFrame.lookVector)
 
 	repeat
 		task.wait(hold)
@@ -216,7 +219,9 @@ function Getuptospeed()
 			break
 		end
 	until Instrument:GetReading("Speed") >= L2
-	print(L2)
+	print(L2..` {(DateTime.now().UnixTimestampMillis-Timestamp)/1000} secs!`)
+	
+	
 
 end
 
@@ -313,7 +318,7 @@ while wait(1/TimeClock) do
 
 		if Modes.Active == false then return end
 
-		if Instrument:GetReading("Speed") < 1000 then
+		if Instrument:GetReading("Speed") < L2*0.75 then
 			Getuptospeed()
 		end
 
