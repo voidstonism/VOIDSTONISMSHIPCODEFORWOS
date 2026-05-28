@@ -242,7 +242,7 @@ print([[\n
  \______.'|____||____||______.'|_____||_____|    |_____||_______| 
                                                                   
 ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
-  <<Version 1.0>> <<Space Only Weapon>> <<VO1D_STONE>> <<Based off of MLAWM-11 code>>
+  <<Version 1.1>> <<Space Only Weapon>> <<VO1D_STONE>> <<Based off of MLAWM-11 code>>
 
 Commands:
 -t (Target) - Set the target to the player of your choice
@@ -279,9 +279,13 @@ local Commands = {
 		Debug = not Debug
 	end,
 	["-ki"] = function(plrid,msg)
-		ConnectAllTouch()
-		for i = 1, 20 do
-			Dispenser:Dispense()
+		if Modes.Active == true then
+			ConnectAllTouch()
+			for i = 1, 20 do
+				Dispenser:Dispense()
+			end
+		else
+			print("Cannot kill missile, it is in sleep mode.")
 		end
 	end,
 }
