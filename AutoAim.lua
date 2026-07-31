@@ -152,7 +152,7 @@ local function GetOutOfHarmsWay()
 		Gyro:PointAt(Pos)
 		Speed(100)
 		print("[Copilot]: I WILL KEEP RUNNING UNTILL YOU INTERVENE. HOWEVER, IF YOU ARE NOT IN SEAT, I WILL STOP FOR YOU!")
-		task.wait(30)
+		task.wait(120)
 		if Seat:GetOccupant() then
 			print("[Copilot]: You are in control.")
 		else
