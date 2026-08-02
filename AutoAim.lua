@@ -49,6 +49,7 @@ local WhiteListID = {
 	1065929391, --lodire2o
 	857491600, --makerbenjammin6
 	3372922014, --GenericRblxStudioDev
+	212745197, --Bingo146
 	190573844, --dorpg
 	1949933105, --articlize
 	1572474960, --iamachicken1928
