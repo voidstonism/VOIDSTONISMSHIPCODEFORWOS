@@ -10,6 +10,8 @@ local LifeSensor = GetPart("LifeSensor")
 local Gyro = GetPart("Gyro")
 local Seat = GetPart("VehicleSeat")
 
+local FLEETIME = 60
+
 Gyro.MaxTorque = 0
 Gyro.TriggerWhenSeeked = false
 Seat.Enabled = true
@@ -101,7 +103,7 @@ end
 
 -- Main auto-aim loop
 local function AutoAim()
-	while wait(0.1) do
+	while task.wait(0.1) do
 		local name, predictedPos, distance = PredictTargetPosition()
 
 		if name and AutoAimBoolean then
@@ -146,24 +148,36 @@ local function GetOutOfHarmsWay()
 
 	local function ESCAPE()
 		Beep()
+		
 		Seat.Enabled = false
+		
 		Gyro.MaxTorque = 1e10
+		
 		MegaSwitch(true)
+		
 		Anchor.Anchored = false
+		
+		Gyro.Seek = ""
+		
 		Gyro:PointAt(Pos)
+		
 		Speed(100)
+		
 		print("[Copilot]: I WILL KEEP RUNNING UNTILL YOU INTERVENE. HOWEVER, IF YOU ARE NOT IN SEAT, I WILL STOP FOR YOU!")
-		task.wait(120)
+		
+		task.wait(FLEETIME)
+		
 		if Seat:GetOccupant() then
 			print("[Copilot]: You are in control.")
 		else
 			print("[Copilot]: You left the seat, I will stop for you.")
 			MegaSwitch(false)
 			Anchor.Anchored = true
-			task.wait(0.5)
+			task.wait(0.1)
 			Anchor.Anchored = false
-			task.wait(0.5)
-			Anchor.Anchored = true
+			task.wait(0.1)
+			Anchor.Anchored = true -- this is because anchoring at a high speed causes the game to think the position of a spawnpoint is signigicantlly ahead or behind of where it actually is
+		
 			Seat.Enabled = true
 			Gyro.MaxTorque = 0
 		end
@@ -180,8 +194,6 @@ local function GetOutOfHarmsWay()
 		print("[Copilot]: Um sir, you are missing parts.")
 	end
 end
-
--- Checks for the presence of dangerous players
 
 local function GetPlr(IgnoreWhiteList:boolean)
 	local Reading = LifeSensor:ListPlayers()
@@ -217,7 +229,7 @@ GetPort(1).Triggered:Connect(function()
 	end
 end)
 
-wait(0.5)
+task.wait(0.5) -- make sure everything is loaded
 
 local numplr = #GetPlr(false)
 
